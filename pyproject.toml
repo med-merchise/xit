@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "xit"
+version = "0.1.0"
+description = "A namespace for a group of related projects."
+authors = ["Medardo Antonio Rodriguez"]
+readme = "README.rst"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/med-merchise/xit"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Topic :: Documentation",
+    "Topic :: Software Development",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^5.0.4"
+flake8-bugbear = "^22.8.23"
+black = "^22.6.0"
+isort = "^5.10.1"
+pylint = "^2.14.5"
+mypy = "^0.971"
+ipdb = "^0.13.9"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.1.2"
+tox = "^3.25.0"
+hypothesis = "^6.46.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+target-version = ['py39', 'py310']
+skip-string-normalization = true
+include = '\.pyi?$'
+exclude = '''
+    /(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | build
+  | dist
+  | docs
+  )/
+  '''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+src_paths = ["xit", "tests"]
+skip_gitignore = true
+
+[tool.mypy]
+ignore_missing_imports = true
