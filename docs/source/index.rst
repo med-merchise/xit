@@ -5,14 +5,15 @@ Xit's documentation!
 Contents
 --------
 
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
 ..
    adrs
    backlog
    faqs
+
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
    HISTORY
    AUTHORS
