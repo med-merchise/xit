@@ -31,6 +31,10 @@ pytest = "^7.1.2"
 tox = "^3.25.0"
 hypothesis = "^6.46.7"
 
+[tool.poetry.group.docs.dependencies]
+sphinx = "^5.2.3"
+sphinx-autodoc-annotation = "^1.0.post1"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
