@@ -3,13 +3,34 @@
 from xit.tools import UNSET
 
 
+def type_name(obj: object) -> str:
+    """Return the type name for a given object."""
+    try:
+        return obj.__name__
+    except AttributeError:
+        return type(obj).__name__
+
+
+def is_type(arg: object) -> bool:
+    """Return True if `arg` is a type, including those for generic typing."""
+    from typing import Any, get_origin
+
+    if isinstance(arg, type):
+        return True
+    else:
+        generic_base = type(Any)
+        if generic_base.__base__ is not object:
+            generic_base = generic_base.__base__
+        return isinstance(arg, generic_base) or get_origin(arg)
+
+
 def _qstrip(q: str) -> str:
-    """Strip a query part (used internally by `get_smart_value`)."""
+    """Strip a query part (used internally by `get_inner_value`)."""
     q = q.strip()
     return q[1:-1] if len(q) > 2 and q[0] in '"\'' and q[0] == q[-1] else q
 
 
-def get_smart_value(
+def get_inner_value(
     obj: object, query: str, default: object = UNSET
 ) -> object:
     """Get an object value using a query representing several alternatives.
@@ -57,7 +78,7 @@ def get_nested_value(
     """Get a nested value.
 
     This is done by traversing the object's hierarchy by doing operations on
-    each part of the path by using the function `get_smart_value`:func:.
+    each part of the path by using the function `get_inner_value`:func:.
 
     Path parts are split using as separator '.' or '/'.  For example:
     ``'x.y.1'``, or ``'x / y / 1'``.
@@ -70,7 +91,7 @@ def get_nested_value(
     WRONG = object()
     parts = iter(re.split('[.]|/', path))
     while obj is not WRONG and (key := next(parts, WRONG)) is not WRONG:
-        obj = get_smart_value(obj, key, WRONG)
+        obj = get_inner_value(obj, key, WRONG)
     if obj is not WRONG:
         return obj
     elif default is not UNSET:

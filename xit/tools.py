@@ -58,36 +58,6 @@ def sda(obj: object, name: str, default: object = None) -> object:
         return default
 
 
-def asdict(obj: object) -> dict[str, object]:
-    """Return a new dictionary mapping from a given object.
-
-    The function applies recursively to field values that are
-    dataclass instances.
-
-    """
-    from collections import abc
-    import dataclasses as dc
-
-    if not isinstance(obj, type):
-        if callable(getattr(obj, 'asdict', None)):
-            return obj.asdict()
-        elif dc.is_dataclass(obj):
-            return dc.asdict(obj)
-        elif callable(getattr(obj, 'dict', None)):  # pydantic
-            return obj.dict()
-        elif isinstance(obj, (abc.Mapping, abc.Sequence)):
-            return dict(obj)
-        else:
-            tname = type(obj).__name__
-            raise TypeError(
-                f"asdict() should not be called on '{tname}' instances."
-            )
-    else:
-        raise TypeError(
-            f"asdict() should not be called on '{obj.__name__}' type."
-        )
-
-
 def current_process_contains(arg: str) -> bool:
     """Return True if `arg` is in the list of current parent processes."""
     import psutil
@@ -100,34 +70,17 @@ def current_process_contains(arg: str) -> bool:
     )
 
 
-def is_type(arg: object) -> bool:
-    """Return True if `arg` is a type, including those for generic typing."""
-    from typing import Any, get_origin
-
-    generic_base = type(Any)
-    if (aux := generic_base.__base__) is not object:
-        generic_base = aux
-    return isinstance(arg, (type, generic_base)) or get_origin(arg)
-
-
-def pop_items(source: dict, *keys) -> dict:
-    """Pop a collection of keys from a source dictionary."""
-    return {key: value for key in keys if (value := source.pop(key, None))}
-
-
-def get_line(s: str, /, index: int = 0, strip_chars: str = None) -> str:
-    """Get index line in a text."""
-    if s:
-        items = s.split('\n')
+def get_line(text: str, /, index: int = 0, strip_chars: str = None) -> str:
+    """Get line at index in a text."""
+    if text:
+        items = text.split('\n')
         if 0 <= index < len(items):
-            res = s.split('\n')[index]
-            if strip_chars:
-                res = res.strip(strip_chars)
+            res = items[index]
+            return res.strip(strip_chars) if strip_chars else res
         else:
-            res = ''
+            return ''
     else:
-        res = ''
-    return res
+        return ''
 
 
 class slicer:
