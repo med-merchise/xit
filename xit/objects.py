@@ -11,6 +11,30 @@ def type_name(obj: object) -> str:
         return type(obj).__name__
 
 
+def short_repr(obj: object, max_len: int = 16) -> str:
+    """Return a short string representation of the object.
+
+    Useful in error messages.
+
+    """
+    ELLIPSIS = '...'
+    if not max_len or max_len < 0:
+        max_len = 4
+    res = repr(obj)
+    if res.startswith('<'):
+        res = type_name(obj)
+    if len(res) > max_len + len(ELLIPSIS):
+        quotes = {'"': '"', "'": "'", '{': '}', '(': ')', '[': ']'}
+        if quotes.get(res[0]) == res[-1]:
+            head, tail = res[0], res[-1]
+            res = res[1:-1]
+            max_len -= 2
+        else:
+            head = tail = ''
+        res = head + res[:max_len] + ELLIPSIS + tail
+    return res
+
+
 def is_type(arg: object) -> bool:
     """Return True if `arg` is a type, including those for generic typing."""
     from typing import Any, get_origin
