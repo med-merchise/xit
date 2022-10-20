@@ -57,6 +57,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+junit/
+junit.xml
+test*.db*
 
 # Translations
 *.mo
@@ -140,6 +143,9 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# VSCode
+.vscode/
 
 # Pyre type checker
 .pyre/
