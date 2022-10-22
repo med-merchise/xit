@@ -1,7 +1,7 @@
 """General mappings tools."""
 
 from collections.abc import Mapping
-from typing import Callable
+from typing import Callable, Type
 
 
 def flatten_dict(source: Mapping, sep: str = '.', prefix: str = '') -> dict:
@@ -40,26 +40,32 @@ def pop_items(source: dict, *keys, **defaults) -> dict:
 
 
 def asdict(
-    obj: object, filter_key: str | Callable[[str], bool] | None = '_'
+    obj: object,
+    filter_key: str | Type | tuple | Callable[[object], bool] | None = '_',
 ) -> dict[str, object]:
     """Return a mapping from a given object.
 
-    Parameter `filter_key` could be: a string (keys starting with that prefix
-    won't be included), a callable to check which keys are ok to be included,
-    or None in which case a key is checked to be a string.  A common filter
-    could be `str.isupper`.
+    :param filter_key: could be a prefix string (keys starting with that
+           prefix won't be included); a type or tuple of types, key is checked
+           to be an instance of any of those types; a callable to check which
+           keys are ok to be included; or None to include all keys.
 
     """
     # TODO: support `attrs` library?
     import dataclasses as dc
+    from xit.tools import safe_call
 
     match filter_key:
+        case class_or_tuple if isinstance(class_or_tuple, (type, tuple)):
+            ok = lambda key: isinstance(key, class_or_tuple)  # noqa: E731
         case str(prefix):
-            ok = lambda key: not key.startswith(prefix)  # noqa: E731
+            ok = lambda key: (  # noqa: E731
+                isinstance(key, str) and not key.startswith(prefix)
+            )
         case callable(check):
-            ok = check
-        case None:
-            ok = lambda key: isinstance(key, str)  # noqa: E731
+            ok = safe_call(check)
+        case None | False:
+            ok = lambda key: True  # noqa: E731
         case _:
             raise TypeError(filter_key)
     if not isinstance(obj, type):

@@ -51,11 +51,26 @@ def sda(obj: object, name: str, default: object = None) -> object:
     Return the value for 'name' if already present, else 'default'.
 
     """
-    try:
-        return getattr(obj, name)
-    except AttributeError:
+    UNSET = object()
+    res = getattr(obj, name, UNSET)
+    if res is UNSET:
         setattr(obj, name, default)
-        return default
+        res = default
+    return default
+
+
+def safe_call(fn: callable) -> object:
+    """Call function in a safe context, return None if any error is raised."""
+    from functools import wraps
+
+    @wraps(fn)
+    def inner(*args, **kwds):
+        try:
+            return fn(*args, **kwds)
+        except Exception:
+            return None
+
+    return inner
 
 
 def current_process_contains(arg: str) -> bool:
