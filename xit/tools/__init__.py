@@ -2,7 +2,7 @@
 
 
 class Unset:
-    """Class for a false marker value.
+    """Class for a false marker singleton value.
 
     Useful as a replacement when `None` could be one of the expected valid
     values.

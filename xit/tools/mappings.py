@@ -62,7 +62,7 @@ def asdict(
             ok = lambda key: (  # noqa: E731
                 isinstance(key, str) and not key.startswith(prefix)
             )
-        case callable(check):
+        case check if callable(check):
             ok = safe_call(check)
         case None | False:
             ok = lambda key: True  # noqa: E731
