@@ -85,17 +85,14 @@ def current_process_contains(arg: str) -> bool:
     )
 
 
-def get_line(text: str, /, index: int = 0, strip_chars: str = None) -> str:
-    """Get line at index in a text."""
-    if text:
-        items = text.split('\n')
-        if 0 <= index < len(items):
-            res = items[index]
-            return res.strip(strip_chars) if strip_chars else res
-        else:
-            return ''
-    else:
-        return ''
+def get_paragraphs(text: str) -> list[str]:
+    """Get non-empty paragraphs in a text."""
+    res = []
+    for part in text.split('\n\n'):
+        aux = ' '.join(line.rstrip() for line in part.rstrip().split('\n'))
+        if aux:
+            res.append(aux)
+    return res
 
 
 class slicer:
