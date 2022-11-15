@@ -1,5 +1,7 @@
 """Miscellaneous operating system tools."""
 
+from xit.tools import UNSET
+
 
 def get_env(key: str, default: object = None) -> object:
     """Get a process environment variable.
@@ -23,3 +25,29 @@ def get_env(key: str, default: object = None) -> object:
                 return value
     else:
         return default
+
+
+def get_stack_value(
+    name: str, *, level: int = 1, default: object = UNSET
+) -> object:
+    """Return a variable value back in the stack frame level of the caller."""
+    import inspect
+
+    frame = inspect.currentframe()
+    try:
+        deep = level
+        while frame and deep > 0:
+            frame = frame.f_back
+            deep -= 1
+        if frame:
+            res = frame.f_globals.get(name, default)
+            if res is not UNSET:
+                return res
+            else:
+                raise NameError(
+                    f"name '{name}' is not defined in stack level {level}"
+                )
+        else:
+            raise RuntimeError(f"no stack frame found at level {level}")
+    finally:
+        del frame  # avoid memory leaks as recommended in documentation
