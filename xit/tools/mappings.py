@@ -32,7 +32,7 @@ def unflatten_dict(source: Mapping, sep: str = '.') -> dict:
 
 
 def pop_items(source: dict, *keys, **defaults) -> dict:
-    """Get a dictionary by popping from 'keys' and 'default' arguments."""
+    """Get a dictionary by popping 'keys' and 'defaults' from 'source'."""
     res = {key: source.pop(key) for key in keys if key in source}
     for key, value in defaults.items():
         res.setdefault(key, source.pop(key, value))
