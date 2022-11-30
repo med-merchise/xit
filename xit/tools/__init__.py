@@ -1,5 +1,7 @@
 """Collection of very simple tools not tied to any specific framework."""
 
+from typing import Callable, Sequence
+
 
 class Unset:
     """Class for a false marker singleton value.
@@ -23,7 +25,7 @@ class Unset:
 UNSET: Unset = Unset()
 
 
-def named_lambda(**kwargs: callable) -> callable:
+def named_lambda(**kwargs: Callable) -> Callable:
     """Return a named lambda function.
 
     Only one value must be provider in the `kwargs` parameters.  For example::
@@ -59,7 +61,7 @@ def sda(obj: object, name: str, default: object = None) -> object:
     return default
 
 
-def safe_call(fn: callable) -> object:
+def safe_call(fn: Callable) -> object:
     """Call function in a safe context, return None if any error is raised."""
     from functools import wraps
 
@@ -93,6 +95,35 @@ def get_paragraphs(text: str) -> list[str]:
         if aux:
             res.append(aux)
     return res
+
+
+def common_prefix(*items: Sequence) -> int:
+    """Determine the common prefix from a set of sequences.
+
+    Returns the count of common elements in all sequences, for example::
+
+      >>> common_prefix("Hello World!", "Hello world!")
+      6
+
+      >>> common_prefix('h.e.l.l.o'.split('.'), 'help')
+      3
+
+    """
+    count = len(items)
+    if count > 0:
+        min_len = min(map(len, items))
+        base, items = items[0], items[1:]
+        idx, ok = 0, True
+        while ok and idx < min_len:
+            if all(base[idx] == item[idx] for item in items):
+                idx += 1
+            else:
+                ok = False
+        return idx
+    else:
+        raise TypeError(
+            "common_prefix() missing at least 1 required positional argument"
+        )
 
 
 class slicer:
