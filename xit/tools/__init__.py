@@ -90,7 +90,7 @@ def current_process_contains(arg: str) -> bool:
 def get_paragraphs(text: str) -> list[str]:
     """Get non-empty paragraphs in a text."""
     res = []
-    for part in text.split('\n\n'):
+    for part in (text or '').split('\n\n'):
         aux = ' '.join(line.rstrip() for line in part.rstrip().split('\n'))
         if aux:
             res.append(aux)
