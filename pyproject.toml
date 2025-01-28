@@ -13,6 +13,9 @@ xit = "xit:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.uv]
+default-groups = ["dev", "tests", "docs"]
+
 [dependency-groups]
 dev = [
     "ipdb>=0.13.13",
