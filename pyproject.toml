@@ -28,3 +28,15 @@ docs = [
 tests = [
     "pytest>=8.3.4",
 ]
+
+[tool.pydocstyle]
+add-ignore = [
+    "D105", # Missing docstring in magic method
+    "D107", # Missing docstring in __init__
+]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "preserve"
