@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Useful tools for common applications"
 authors = [ { name = "Medardo Antonio Rodriguez" } ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "typer-slim>=0.15.1",
+]
 
 [project.scripts]
 xit = "xit:main"
