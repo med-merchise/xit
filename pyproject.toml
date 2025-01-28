@@ -18,3 +18,7 @@ dev = [
     "ipdb>=0.13.13",
     "ipykernel>=6.29.5",
 ]
+docs = [
+    "myst-parser>=4.0.0",
+    "sphinx>=8.1.3",
+]
