@@ -1,2 +1,3 @@
-def main() -> None:
-    print("Hello from xit!")
+"""Main entry point."""
+
+from xit.cli import cli_app as main  # noqa: F401
